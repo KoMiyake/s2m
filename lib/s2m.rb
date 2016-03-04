@@ -19,13 +19,19 @@ def main
 	moneyforward = MoneyForward.new
 	moneyforward.login
 
-	last_payment_date = moneyforward.get_last_payment_date
+	account = moneyforward.select_account
+
+	last_payment_date = moneyforward.get_last_payment_date(account)
 	payments.delete_if {|payment| payment.day <= last_payment_date}
 
 	puts "追加されていない支払いが " + payments.size.to_s + " 件あります．"
 
 	payments.each do |payment|
 		moneyforward.add_history(payment)
+	end
+
+	if payments.size != 0
+		moneyforward.record_last_payment_date(payments[0].day)
 	end
 
 	puts "終了します"

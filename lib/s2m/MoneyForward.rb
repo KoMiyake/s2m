@@ -78,23 +78,40 @@ class MoneyForward
 		sleep 1
 	end
 
-	# アカウントの最終更新日時を調べる
-	def get_last_payment_date
-		account_name = select_account()[1]
+	#require: 使用する口座
+	#ensure: 口座の最終出金日を与える
+	def get_last_payment_date(account)
+		account_name = account[1]
+		last_payment_date_file = File.expand_path("../../../data/last_payment_date", __FILE__)
 
-		@agent.get("https://moneyforward.com/")
-		sleep 1
-		@agent.page.links.find{|e| account_name.include?(e.text)}.click
-		sleep 1.5
-		date = @agent.page.search("//td[@class=\"date form-switch-td\"]/div[@class=\"noform\"]/span").first.text.to_s
-		date = date.split("(")[0].split("/")
+		last_payment_date = nil
+		if not File.exist?(last_payment_date_file)
+			puts "最後に#{account_name}で入金した日付を記入してください"
+			print "年: "
+			year = STDIN.gets.chomp
+			print "月: "
+			month = STDIN.gets.chomp
+			print "日: "
+			day = STDIN.gets.chomp
 
-		day = Time.gm(Time.now.year, date[0].to_i, date[1].to_i, 0, 0, 0)
-		if Time.now < day
-			day.year = day.year-1
+			last_payment_date = Time.gm(year, month, day, 0, 0, 0)
+			
+			Dir.mkdir(File.expand_path("../../../data", __FILE__), 0777)
+			File.open(last_payment_date_file, "w")
+		else 
+			File.open(last_payment_date_file) do |file|
+				file_str = file.read.split(" ")
+				last_payment_date = Time.gm(file_str[0], file_str[1], file_str[2], 0, 0, 0)
+			end
 		end
 
-		day
+		last_payment_date
+	end
+
+	def record_last_payment_date(last_payment_date)
+		last_payment_date_file = File.expand_path("../../../data/last_payment_date", __FILE__)
+		str = "#{last_payment_date.year} #{last_payment_date.month} #{last_payment_date.day}"
+		File.write(last_payment_date_file, str)
 	end
 
 	# 登録されている財布から支払元を選択
