@@ -1,9 +1,10 @@
 # coding: utf-8
-lib = File.expand_path('../', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-Dir[File.expand_path('./s2m') << '/*.rb'].each do |file|
-	require file
-end
+
+s2m_directory = File.expand_path(File.dirname(__FILE__))
+
+require File.expand_path(File.join(s2m_directory, 's2m/MoneyForward'))
+require File.expand_path(File.join(s2m_directory, 's2m/Payment'))
+require File.expand_path(File.join(s2m_directory, 's2m/Seikyo'))
 
 module S2m
 
