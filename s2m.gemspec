@@ -6,12 +6,12 @@ require 's2m/version'
 Gem::Specification.new do |spec|
   spec.name          = "s2m"
   spec.version       = S2m::VERSION
-  spec.authors       = ["Ko Miyake"]
+  spec.authors       = ["LazyMii"]
   spec.email         = ["is0189si@ed.ritsumei.ac.jp"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{大学生協の購買履歴をMoneForwardに登録する}
+  spec.description   = %q{大学生協(https://mp.seikyou.jp/mypage/) の購買履歴をMoneyForwardに登録する}
+  spec.homepage      = "https://github.com/LazyMii"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
