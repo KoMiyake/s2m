@@ -32,6 +32,30 @@ class MoneyForward
 				puts "ログインに失敗しました"
 			end
 		end while not login?
+
+		if need_two_step_verifications?
+			two_step_verifications
+		end
+	end
+
+	#require: ログインが終わっている
+	#ensure: 2段階認証を完了する
+	def two_step_verifications
+		begin
+			print "2段階認証のコードを入力してください: "
+			verification_code = STDIN.gets.chomp
+
+			two_step_verifications_url = "https://moneyforward.com/users/two_step_verifications"
+			@agent.get(two_step_verifications_url) do |page|
+				page.form_with(:action => '/users/two_step_verifications/verify') do |form|
+					form.field_with(:name => "verification_code").value = verification_code
+				end.click_button
+			end
+		end while not need_two_step_verifications?
+	end
+
+	def need_two_step_verifications?
+		return @agent.page.uri.to_s.include?("two_step_verifications")
 	end
 
 	def login?
@@ -57,6 +81,7 @@ class MoneyForward
 	# アカウントの最終更新日時を調べる
 	def get_last_payment_date
 		account_name = select_account()[1]
+
 		@agent.get("https://moneyforward.com/")
 		sleep 1
 		@agent.page.links.find{|e| account_name.include?(e.text)}.click
