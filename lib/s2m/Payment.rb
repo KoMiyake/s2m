@@ -14,7 +14,7 @@ class Payment
 		@price = data[4]
 	end
 
-	def output
-		print "#{@day.month.to_s+ "/" + @day.day.to_s} @#{@place} : #{@product} #{@price}\n"
+	def to_s
+		"#{@day.month.to_s+ "/" + @day.day.to_s} @#{@place} : #{@product} #{@price}"
 	end
 end

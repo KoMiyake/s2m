@@ -62,7 +62,7 @@ class MoneyForward
 		@agent.get("https://moneyforward.com/")
 		sleep 1
 
-		payment.output
+		puts payment.to_s
 		@agent.page.form_with(:id => "js-cf-manual-payment-entry-form") do |form|
 			form["user_asset_act[large_category_id]"] = "11"
 			form["user_asset_act[middle_category_id]"] = "42"

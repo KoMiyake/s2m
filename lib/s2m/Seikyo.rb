@@ -46,8 +46,6 @@ class Seikyo
 			end
 		end
 
-		print day + " の購買履歴の取得に成功しました\n"
-
 		File.delete file_name
 
 		payments
