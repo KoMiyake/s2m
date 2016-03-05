@@ -6,11 +6,15 @@ require File.expand_path(File.join(s2m_directory, 's2m/MoneyForward'))
 require File.expand_path(File.join(s2m_directory, 's2m/Payment'))
 require File.expand_path(File.join(s2m_directory, 's2m/Seikyo'))
 
+require 'dotenv'
+
 module S2m
 
 end
 
 def main
+	Dotenv.load
+
 	seikyo = Seikyo.new
 	seikyo.login
 

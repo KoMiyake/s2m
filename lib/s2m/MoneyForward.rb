@@ -14,22 +14,18 @@ class MoneyForward
 	def login
 		begin
 			puts "Login MoneyForward..."
-			print "ID: "
-			id = STDIN.gets.chomp
-			print "Pass: "
-			pass = STDIN.noecho(&:gets).chomp
-			puts ""
 
 			@agent.get(@login_url) do |page|
 				page.form_with(:id => 'new_sign_in_session_service') do  |form|
-					form.field_with(:name => "sign_in_session_service[email]").value = id
-					form.field_with(:name => "sign_in_session_service[password]").value = pass
+					form.field_with(:name => "sign_in_session_service[email]").value = ENV['MONEYFORWARD_ID']
+					form.field_with(:name => "sign_in_session_service[password]").value = ENV['MONEYFORWARD_PASS']
 				end.click_button
 			end
 			sleep 1
 
 			if not login?
 				puts "ログインに失敗しました"
+				exit
 			end
 		end while not login?
 
@@ -95,7 +91,7 @@ class MoneyForward
 			day = STDIN.gets.chomp
 
 			last_payment_date = Time.gm(year, month, day, 0, 0, 0)
-			
+
 			Dir.mkdir(File.expand_path("../../../data", __FILE__), 0777)
 			File.open(last_payment_date_file, "w")
 		else 

@@ -13,21 +13,17 @@ class Seikyo
 	def login
 		begin
 			puts "Login SEIKYO..."
-			print "ID: "
-			id = STDIN.gets.chomp
-			print "Pass: "
-			pass = STDIN.noecho(&:gets).chomp
-			puts ""
 			@agent.get(@login_url) do |page|
 				page.form_with(:name => 'loginForm') do  |form|
-					form.field_with(:name => "loginId").value = id
-					form.field_with(:name => "password").value = pass
+					form.field_with(:name => "loginId").value = ENV['SEIKYO_ID']
+					form.field_with(:name => "password").value = ENV['SEIKYO_PASS']
 				end.click_button
 			end
 			sleep 1
 
 			if not login?
 				puts "ログインに失敗しました"
+				exit
 			end
 		end while not login?
 	end
