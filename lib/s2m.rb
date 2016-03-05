@@ -13,7 +13,7 @@ module S2m
 end
 
 def main
-	Dotenv.load
+	Dotenv.load File.expand_path(File.join(File.expand_path(File.dirname(__FILE__)), '../.env'))
 
 	seikyo = Seikyo.new
 	seikyo.login
