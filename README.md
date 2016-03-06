@@ -11,6 +11,10 @@
 
 	$ bundle install 
 
+また，nkfコマンドが必要なので，それもインストールしてください
+
+	$ sudo apt-get install nkf
+
 ## Usage
 
 実行は，cloneしたディレクトリ内で
