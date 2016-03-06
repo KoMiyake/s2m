@@ -71,6 +71,7 @@ class MoneyForward
 		return !@agent.page.search("//a[@href=\"/users/sign_out\"]").empty?
 	end
 
+	#TODO: 使いやすいように，引数を分ける
 	def add_history(payment)
 		@agent.get("https://moneyforward.com/")
 		sleep 1

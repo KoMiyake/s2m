@@ -5,5 +5,4 @@ gemspec
 
 gem 'dotenv'
 gem 'mechanize'
-gem 'openssl'
 gem 'nokogiri'
