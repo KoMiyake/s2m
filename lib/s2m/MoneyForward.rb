@@ -60,6 +60,7 @@ class MoneyForward
 					form.field_with(:name => "verification_code").value = verification_code
 				end.click_button
 			end
+			sleep 1
 		end while not need_two_step_verifications?
 	end
 
