@@ -12,11 +12,25 @@ class Seikyo
 
 	def login
 		begin
+			id = ENV['SEIKYO_ID']
+			pass = ENV['SEIKYO_PASS']
+
 			puts "Login SEIKYO..."
+			if id == nil
+				print "ID: "
+				id = STDIN.gets.chomp
+			end
+
+			if pass == nil
+				print "Pass: "
+				pass = STDIN.noecho(&:gets).chomp
+				puts ""
+			end
+
 			@agent.get(@login_url) do |page|
 				page.form_with(:name => 'loginForm') do  |form|
-					form.field_with(:name => "loginId").value = ENV['SEIKYO_ID']
-					form.field_with(:name => "password").value = ENV['SEIKYO_PASS']
+					form.field_with(:name => "loginId").value = id 
+					form.field_with(:name => "password").value = pass 
 				end.click_button
 			end
 			sleep 1

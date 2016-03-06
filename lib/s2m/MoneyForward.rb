@@ -13,12 +13,25 @@ class MoneyForward
 
 	def login
 		begin
+			id = ENV['MONEYFORWARD_ID']
+			pass = ENV['MONEYFORWARD_PASS']
+
 			puts "Login MoneyForward..."
+			if id == nil
+				print "ID: "
+				id = STDIN.gets.chomp
+			end
+
+			if pass == nil
+				print "Pass: "
+				pass = STDIN.noecho(&:gets).chomp
+				puts ""
+			end
 
 			@agent.get(@login_url) do |page|
 				page.form_with(:id => 'new_sign_in_session_service') do  |form|
-					form.field_with(:name => "sign_in_session_service[email]").value = ENV['MONEYFORWARD_ID']
-					form.field_with(:name => "sign_in_session_service[password]").value = ENV['MONEYFORWARD_PASS']
+					form.field_with(:name => "sign_in_session_service[email]").value = id 
+					form.field_with(:name => "sign_in_session_service[password]").value = pass 
 				end.click_button
 			end
 			sleep 1
