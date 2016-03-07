@@ -36,6 +36,8 @@ def main
 
 	if payments.size != 0
 		moneyforward.record_last_payment_date(payments[0].day)
+	else
+		moneyforward.record_last_payment_date(last_payment_date)
 	end
 
 	puts "終了します"
