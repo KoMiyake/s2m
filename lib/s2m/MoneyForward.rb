@@ -143,19 +143,26 @@ class MoneyForward
 		end
 
 		while true
-			for i in 1..accounts.size-1
-				puts i.to_s + " " + accounts[i-1].to_s
-			end
-			print "どの支出元を使用しますか？: "
-			num = STDIN.gets.chomp.to_i
 
-			if 0 < num and num < accounts.size
+			account = ENV['MONEYFORWARD_ACCOUNT'].to_i
+
+			if account == nil
+				for i in 1..accounts.size-1
+					puts i.to_s + " " + accounts[i-1].to_s
+				end
+
+				print "どの支出元を使用しますか？: "
+				account = STDIN.gets.chomp.to_i
+			end
+
+
+			if 0 < account and account < accounts.size
 				break
 			else
 				puts "正しい数値を入力してください"
 			end
 		end
-		@payment_account = [key[num-1].to_s, accounts[num-1].to_s]
+		@payment_account = [key[account-1].to_s, accounts[account-1].to_s]
 		@payment_account
 	end
 end
