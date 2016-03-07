@@ -142,9 +142,8 @@ class MoneyForward
 			end
 		end
 
+		account = ENV['MONEYFORWARD_ACCOUNT'].to_i
 		while true
-
-			account = ENV['MONEYFORWARD_ACCOUNT'].to_i
 
 			if account == nil
 				for i in 1..accounts.size-1
@@ -160,6 +159,7 @@ class MoneyForward
 				break
 			else
 				puts "正しい数値を入力してください"
+				account = nil
 			end
 		end
 		@payment_account = [key[account-1].to_s, accounts[account-1].to_s]
