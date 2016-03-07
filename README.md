@@ -1,6 +1,7 @@
 # s2m
 
 [大学生協](https://mp.seikyou.jp/mypage/) の購買履歴をMoneyForwardに登録するものです．
+
 現在，入金履歴の登録には対応していません．
 
 ## Installation
@@ -33,6 +34,7 @@ cloneしたディレクトリ直下に.envファイルを作成することに�
 
 	MONEYFORWARD_ID   = 'XXXXXXXXXXXXXXX'
 	MONEYFORWARD_PASS = 'XXXXXXXXXXXXXXX'
+	MONEYFORWARD_ACCOUNT = 'XXXXXXXXXXXXXXX'
 	SEIKYO_ID   = 'XXXXXXXXXXXXXXX'
 	SEIKYO_PASS = 'XXXXXXXXXXXXXXX'
 
