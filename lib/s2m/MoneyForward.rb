@@ -96,7 +96,7 @@ class MoneyForward
 
 		last_payment_date = nil
 		if not File.exist?(last_payment_date_file)
-			puts "最後に#{account_name}で入金した日付を記入してください"
+			puts "最後に#{account_name}で出金した日付を記入してください"
 			print "年: "
 			year = STDIN.gets.chomp
 			print "月: "
