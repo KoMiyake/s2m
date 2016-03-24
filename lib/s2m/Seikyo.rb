@@ -49,12 +49,12 @@ class Seikyo
 		return !@agent.page.search("//img[@alt=\"ログイン中\"]").empty?
 	end
 
-	def analysis_cvs(file_name)
+	def analysis_cvs(cvs_file)
 		payments = []
 		# 文字コードの問題でcvsファイルが読み込めないので，nkfコマンドでUTF-8に直している
-		system("nkf -w --overwrite " + file_name)
+		system("nkf -w --overwrite " + cvs_file)
 
-		File.open(file_name) do |file|
+		File.open(cvs_file) do |file|
 			file_str = file.read
 			file_str.split("\n").slice!(2..file_str.split("\n").size()-1).each do |data|
 				data.gsub!("\"", "")
@@ -73,7 +73,7 @@ class Seikyo
 			end
 		end
 
-		File.delete file_name
+		File.delete cvs_file
 
 		payments
 	end
@@ -87,12 +87,12 @@ class Seikyo
 		@agent.submit(form)
 		sleep 1
 
-		file_name = create_file_name()
+		cvs_file = create_file_name()
 
 		form = @agent.page.form("AllHistoryFormCsvDownload")
-		@agent.submit(form).save_as(file_name)
+		@agent.submit(form).save_as(cvs_file)
 
-		payments = analysis_cvs(file_name)
+		payments = analysis_cvs(cvs_file)
 
 
 		@agent.get("https://mp.seikyou.jp/mypage/Menu.change.do")
@@ -108,12 +108,12 @@ class Seikyo
 		@agent.submit(form)
 		sleep 1
 
-		file_name = create_file_name()
+		cvs_file = create_file_name()
 
 		form = @agent.page.form("AllHistoryFormCsvDownload")
-		@agent.submit(form).save_as(file_name)
+		@agent.submit(form).save_as(cvs_file)
 
-		payments = payments + analysis_cvs(file_name)
+		payments = payments + analysis_cvs(cvs_file)
 
 		payments
 	end
