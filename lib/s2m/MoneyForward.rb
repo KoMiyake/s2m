@@ -61,7 +61,7 @@ class MoneyForward
 				end.click_button
 			end
 			sleep 1
-		end while not need_two_step_verifications?
+		end while need_two_step_verifications?
 	end
 
 	def need_two_step_verifications?

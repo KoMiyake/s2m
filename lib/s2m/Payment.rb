@@ -9,6 +9,6 @@ class Payment
 	end
 
 	def to_s
-		"#{@day.month.to_s+ "/" + @day.day.to_s} #{@product} #{@price}を追加"
+		"#{@day.month.to_s+ "/" + @day.day.to_s} #{@product} #{@price}"
 	end
 end

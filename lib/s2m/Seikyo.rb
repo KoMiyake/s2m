@@ -5,6 +5,9 @@ require 'nokogiri'
 require 'io/console'
 
 class Seikyo
+	LARGE_CATEGORY_ID_OF_FOOD_EXPENSES = 11
+	MIDDLE_CATEGORY_ID_OF_EATING_OUT = 42
+	
 	def initialize
 		@agent = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv3', OpenSSL::SSL::VERIFY_NONE}
 		@login_url = 'https://mp.seikyou.jp/mypage/Static.init.do'
@@ -47,9 +50,6 @@ class Seikyo
 	end
 
 	def analysis_cvs(file_name)
-		LARGE_CATEGORY_ID_OF_FOOD_EXPENSES = 11
-		MIDDLE_CATEGORY_ID_OF_EATING_OUT = 42
-
 		payments = []
 		# 文字コードの問題でcvsファイルが読み込めないので，nkfコマンドでUTF-8に直している
 		system("nkf -w --overwrite " + file_name)
