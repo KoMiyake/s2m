@@ -47,15 +47,29 @@ class Seikyo
 	end
 
 	def analysis_cvs(file_name)
+		LARGE_CATEGORY_ID_OF_FOOD_EXPENSES = 11
+		MIDDLE_CATEGORY_ID_OF_EATING_OUT = 42
+
 		payments = []
 		# 文字コードの問題でcvsファイルが読み込めないので，nkfコマンドでUTF-8に直している
 		system("nkf -w --overwrite " + file_name)
-		
+
 		File.open(file_name) do |file|
 			file_str = file.read
 			file_str.split("\n").slice!(2..file_str.split("\n").size()-1).each do |data|
 				data.gsub!("\"", "")
-				payments << Payment.new(data)
+
+				data = data.split(",")
+				date = data[0].split("(")[0].split("/")
+				day = Time.gm(Time.now.year, date[0].to_i, date[1].to_i, 0, 0, 0)
+				if Time.now < day
+					day.year = day.year-1
+				end
+
+				product = data[2]
+				price = data[4]
+
+				payments << Payment.new(day, product, price, LARGE_CATEGORY_ID_OF_FOOD_EXPENSES, MIDDLE_CATEGORY_ID_OF_EATING_OUT)
 			end
 		end
 

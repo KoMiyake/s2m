@@ -1,20 +1,14 @@
 class Payment
-	attr_accessor :day, :place, :product, :point, :price
-	def initialize(data)
-		data = data.split(",")
-		date = data[0].split("(")[0].split("/")
-		@day = Time.gm(Time.now.year, date[0].to_i, date[1].to_i, 0, 0, 0)
-		if Time.now < day
-			day.year = day.year-1
-		end
-
-		@place = data[1]
-		@product = data[2]
-		@point = data[3]
-		@price = data[4]
+	attr_accessor :day, :product, :price, :large_category_id, :middle_category_id
+	def initialize(day, product, price, large_category_id, middle_category_id)
+		@day = day 
+		@product = product 
+		@price = price
+		@large_category_id = large_category_id
+		@middle_category_id = middle_category_id
 	end
 
 	def to_s
-		"#{@day.month.to_s+ "/" + @day.day.to_s} @#{@place} : #{@product} #{@price}"
+		"#{@day.month.to_s+ "/" + @day.day.to_s} #{@product} #{@price}を追加"
 	end
 end

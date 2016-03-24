@@ -72,15 +72,14 @@ class MoneyForward
 		return !@agent.page.search("//a[@href=\"/users/sign_out\"]").empty?
 	end
 
-	#TODO: 使いやすいように，引数を分ける
 	def add_history(payment)
 		@agent.get("https://moneyforward.com/")
 		sleep 1
 
 		puts payment.to_s
 		@agent.page.form_with(:id => "js-cf-manual-payment-entry-form") do |form|
-			form["user_asset_act[large_category_id]"] = "11"
-			form["user_asset_act[middle_category_id]"] = "42"
+			form["user_asset_act[large_category_id]"] = payment.large_category_id
+			form["user_asset_act[middle_category_id]"] = payment.middle_category_id
 			form.field_with(:name => "user_asset_act[sub_account_id_hash]").option_with(:value => @payment_account[0]).click
 			form.field_with(:id => "js-cf-manual-payment-entry-amount").value = payment.price
 			form["user_asset_act[updated_at]"] = payment.day.year.to_s + "/" + payment.day.month.to_s + "/" + payment.day.day.to_s
