@@ -46,14 +46,13 @@ class Seikyo
 		return !@agent.page.search("//img[@alt=\"ログイン中\"]").empty?
 	end
 
-	# 文字コードの問題でcvsファイルが読み込めないので，nkfコマンドでUTF-8に直している
 	def analysis_cvs(file_name)
 		payments = []
+		# 文字コードの問題でcvsファイルが読み込めないので，nkfコマンドでUTF-8に直している
 		system("nkf -w --overwrite " + file_name)
-		day = ""
+		
 		File.open(file_name) do |file|
 			file_str = file.read
-			day = file_str.split("\n")[0].split("：")[1].gsub!("\r", "")
 			file_str.split("\n").slice!(2..file_str.split("\n").size()-1).each do |data|
 				data.gsub!("\"", "")
 				payments << Payment.new(data)
