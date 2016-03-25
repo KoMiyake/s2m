@@ -94,7 +94,6 @@ class MoneyForward
 		account_name = account[1]
 		last_payment_date_file = File.expand_path("../../../data/last_payment_date", __FILE__)
 
-		last_payment_date = nil
 		if not File.exist?(last_payment_date_file)
 			puts "最後に#{account_name}で出金した日付を記入してください"
 			print "年: "
@@ -104,18 +103,16 @@ class MoneyForward
 			print "日: "
 			day = STDIN.gets.chomp
 
-			last_payment_date = Time.gm(year, month, day, 0, 0, 0)
-
 			Dir.mkdir(File.expand_path("../../../data", __FILE__), 0777)
 			File.open(last_payment_date_file, "w")
+
+			return Time.gm(year, month, day, 0, 0, 0)
 		else 
 			File.open(last_payment_date_file) do |file|
 				file_str = file.read.split(" ")
-				last_payment_date = Time.gm(file_str[0], file_str[1], file_str[2], 0, 0, 0)
+				return Time.gm(file_str[0], file_str[1], file_str[2], 0, 0, 0)
 			end
 		end
-
-		last_payment_date
 	end
 
 	def record_last_payment_date(last_payment_date)
