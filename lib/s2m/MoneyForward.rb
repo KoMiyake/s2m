@@ -11,6 +11,7 @@ class MoneyForward
 		@base_url = 'https://moneyforward.com/'
 	end
 
+	public
 	def login
 		begin
 			id = ENV['MONEYFORWARD_ID']
@@ -73,6 +74,7 @@ class MoneyForward
 		return !@agent.page.search("//a[@href=\"/users/sign_out\"]").empty?
 	end
 
+	public
 	def add(payments)
 		account = select_account
 

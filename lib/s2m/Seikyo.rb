@@ -13,6 +13,7 @@ class Seikyo
 		@login_url = 'https://mp.seikyou.jp/mypage/Static.init.do'
 	end
 
+	public
 	def login
 		begin
 			id = ENV['SEIKYO_ID']
@@ -81,6 +82,7 @@ class Seikyo
 	end
 
 	# 2ヶ月分の購買履歴をとってくる
+	public
 	def get_payment_history
 		puts "購買履歴の取得をします..."
 		form =  @agent.page.form("menuForm")
