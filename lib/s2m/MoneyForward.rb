@@ -72,6 +72,25 @@ class MoneyForward
 		return !@agent.page.search("//a[@href=\"/users/sign_out\"]").empty?
 	end
 
+	def add(payments)
+		account = select_account
+
+		last_payment_date = get_last_payment_date(account)
+		payments.delete_if {|payment| payment.day <= last_payment_date}
+
+		puts "追加されていない支払いが#{payments.size.to_s}件あります．"
+
+		payments.each do |payment|
+			add_history(payment)
+		end
+
+		if payments.size != 0
+			record_last_payment_date(payments[0].day)
+		else
+			record_last_payment_date(last_payment_date)
+		end
+	end
+
 	def add_history(payment)
 		@agent.get("https://moneyforward.com/")
 		sleep 1
