@@ -8,10 +8,6 @@ require File.expand_path(File.join(s2m_directory, 's2m/Seikyo'))
 
 require 'dotenv'
 
-module S2m
-
-end
-
 def main
 	Dotenv.load File.expand_path(File.join(File.expand_path(File.dirname(__FILE__)), '../.env'))
 

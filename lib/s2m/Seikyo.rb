@@ -45,10 +45,12 @@ class Seikyo
 		end while not login?
 	end
 
+	private
 	def login?
 		return !@agent.page.search("//img[@alt=\"ログイン中\"]").empty?
 	end
 
+	private
 	def analysis_cvs(cvs_file)
 		payments = []
 		# 文字コードの問題でcvsファイルが読み込めないので，nkfコマンドでUTF-8に直している
@@ -118,6 +120,7 @@ class Seikyo
 		payments
 	end
 
+	private
 	def create_file_name
 		begin
 			file_name = (0...8).map{ (65 + rand(26)).chr }.join

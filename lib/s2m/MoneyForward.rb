@@ -42,13 +42,12 @@ class MoneyForward
 			end
 		end while not login?
 
-		if need_two_step_verifications?
-			two_step_verifications
-		end
+		two_step_verifications if need_two_step_verifications?
 	end
 
 	#require: ログインが終わっている
 	#ensure: 2段階認証を完了する
+	private
 	def two_step_verifications
 		begin
 			print "2段階認証のコードを入力してください: "
@@ -64,10 +63,12 @@ class MoneyForward
 		end while need_two_step_verifications?
 	end
 
+	private
 	def need_two_step_verifications?
 		return @agent.page.uri.to_s.include?("two_step_verifications")
 	end
 
+	private
 	def login?
 		return !@agent.page.search("//a[@href=\"/users/sign_out\"]").empty?
 	end
@@ -89,6 +90,7 @@ class MoneyForward
 		end
 	end
 
+	private
 	def add_history(payment)
 		@agent.get("https://moneyforward.com/")
 		sleep 1
@@ -107,6 +109,7 @@ class MoneyForward
 
 	#require: 使用する口座
 	#ensure: 口座の最終出金日を与える
+	private
 	def get_last_payment_date(account)
 		account_name = account[1]
 		last_payment_date_file = File.expand_path("../../../data/last_payment_date", __FILE__)
@@ -132,6 +135,7 @@ class MoneyForward
 		end
 	end
 
+	private
 	def record_last_payment_date(last_payment_date)
 		last_payment_date_file = File.expand_path("../../../data/last_payment_date", __FILE__)
 		str = "#{last_payment_date.year} #{last_payment_date.month} #{last_payment_date.day}"
@@ -139,6 +143,7 @@ class MoneyForward
 	end
 
 	# 登録されている財布から支払元を選択
+	private
 	def select_account
 		accounts = []
 		key = []
@@ -157,7 +162,6 @@ class MoneyForward
 
 		account = ENV['MONEYFORWARD_ACCOUNT'].to_i
 		while true
-
 			if account == nil
 				for i in 1..accounts.size-1
 					puts i.to_s + " " + accounts[i-1].to_s
