@@ -123,9 +123,6 @@ class MoneyForward
 			print "日: "
 			day = STDIN.gets.chomp
 
-			Dir.mkdir(File.expand_path("../../../data", __FILE__), 0777)
-			File.open(last_payment_date_file, "w")
-
 			return Time.gm(year, month, day, 0, 0, 0)
 		else 
 			File.open(last_payment_date_file) do |file|
@@ -138,6 +135,12 @@ class MoneyForward
 	private
 	def record_last_payment_date(last_payment_date)
 		last_payment_date_file = File.expand_path("../../../data/last_payment_date", __FILE__)
+
+		if not File.exist?(last_payment_date_file)
+			Dir.mkdir(File.expand_path("../../../data", __FILE__), 0777)
+			File.open(last_payment_date_file, "w")
+		end
+
 		str = "#{last_payment_date.year} #{last_payment_date.month} #{last_payment_date.day}"
 		File.write(last_payment_date_file, str)
 	end
@@ -170,7 +173,6 @@ class MoneyForward
 				print "どの支出元を使用しますか？: "
 				account = STDIN.gets.chomp.to_i
 			end
-
 
 			if 0 < account and account < accounts.size
 				break
