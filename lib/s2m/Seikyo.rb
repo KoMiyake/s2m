@@ -125,7 +125,7 @@ class Seikyo
 	private
 	def create_file_name
 		begin
-			file_name = (0...8).map{ (65 + rand(26)).chr }.join
+			file_name = "/tmp/" + (0...8).map{ (65 + rand(26)).chr }.join
 		end while File.exist? file_name
 		file_name
 	end
