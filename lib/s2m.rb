@@ -12,7 +12,11 @@ def main
 	Dotenv.load File.expand_path(File.join(File.expand_path(File.dirname(__FILE__)), '../.env'))
 
 	seikyo = Seikyo.new
-	seikyo.login
+
+	#TODO: カウントしてlogin失敗しまくったらexitする
+	begin
+		seikyo.login(ENV['SEIKYO_ID'], ENV['SEIKYO_PASS'])
+	end while not seikyo.login?
 
 	payments = seikyo.get_payment_history
 

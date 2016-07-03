@@ -7,48 +7,47 @@ require 'io/console'
 class Seikyo
 	LARGE_CATEGORY_ID_OF_FOOD_EXPENSES = 11
 	MIDDLE_CATEGORY_ID_OF_EATING_OUT = 42
-	
+
 	def initialize
 		@agent = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv3', OpenSSL::SSL::VERIFY_NONE}
 		@login_url = 'https://mp.seikyou.jp/mypage/Static.init.do'
 	end
 
 	public
-	def login
-		begin
-			id = ENV['SEIKYO_ID']
-			pass = ENV['SEIKYO_PASS']
+	def login(id, pass)
+		puts "Login SEIKYO..."
+		if id == nil
+			print "ID: "
+			id = STDIN.gets.chomp
+		end
 
-			puts "Login SEIKYO..."
-			if id == nil
-				print "ID: "
-				id = STDIN.gets.chomp
-			end
+		if pass == nil
+			print "Pass: "
+			pass = STDIN.noecho(&:gets).chomp
+			puts ""
+		end
 
-			if pass == nil
-				print "Pass: "
-				pass = STDIN.noecho(&:gets).chomp
-				puts ""
-			end
+		@agent.get(@login_url) do |page|
+			page.form_with(:name => 'loginForm') do  |form|
+				form.field_with(:name => "loginId").value = id 
+				form.field_with(:name => "password").value = pass 
+			end.click_button
+		end
+		sleep 1
 
-			@agent.get(@login_url) do |page|
-				page.form_with(:name => 'loginForm') do  |form|
-					form.field_with(:name => "loginId").value = id 
-					form.field_with(:name => "password").value = pass 
-				end.click_button
-			end
-			sleep 1
-
-			if not login?
-				puts "ログインに失敗しました"
-				exit
-			end
-		end while not login?
+		if not login?
+			puts "ログインに失敗しました"
+			false
+		end
+		true
 	end
 
-	private
 	def login?
-		return !@agent.page.search("//img[@alt=\"ログイン中\"]").empty?
+		begin
+			return !@agent.page.search("//img[@alt=\"ログイン中\"]").empty?
+		rescue
+			false
+		end
 	end
 
 	private
