@@ -3,7 +3,7 @@ require 'dotenv'
 
 require File.expand_path('lib/s2m/MoneyForward')
 
-class SeikyoTest < Test::Unit::TestCase
+class MoneyForwardTest < Test::Unit::TestCase
 	def setup
 		Dotenv.load File.expand_path(File.join(File.expand_path(File.dirname(__FILE__)), '../.env'))
 		@moneyforward = MoneyForward.new
