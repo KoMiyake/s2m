@@ -12,56 +12,66 @@ class MoneyForward
 	end
 
 	public
-	def login
-		begin
-			id = ENV['MONEYFORWARD_ID']
-			pass = ENV['MONEYFORWARD_PASS']
+	def login(id, pass)
+		puts "Login MoneyForward..."
+		if id == nil
+			print "ID: "
+			id = STDIN.gets.chomp
+		end
 
-			puts "Login MoneyForward..."
-			if id == nil
-				print "ID: "
-				id = STDIN.gets.chomp
+		if pass == nil
+			print "Pass: "
+			pass = STDIN.noecho(&:gets).chomp
+			puts ""
+		end
+
+		@agent.get(@login_url) do |page|
+			page.form_with(:id => 'new_sign_in_session_service') do  |form|
+				form.field_with(:name => "sign_in_session_service[email]").value = id 
+				form.field_with(:name => "sign_in_session_service[password]").value = pass 
+			end.click_button
+		end
+		sleep 1
+
+		if not login?
+			puts "ログインに失敗しました"
+			return false
+		end
+		
+		while need_two_step_verifications?
+			two_step_verifications
+
+			if need_two_step_verifications?
+				puts "2段階認証に失敗しました"
+				return false
 			end
+		end
 
-			if pass == nil
-				print "Pass: "
-				pass = STDIN.noecho(&:gets).chomp
-				puts ""
-			end
+		true
+	end
 
-			@agent.get(@login_url) do |page|
-				page.form_with(:id => 'new_sign_in_session_service') do  |form|
-					form.field_with(:name => "sign_in_session_service[email]").value = id 
-					form.field_with(:name => "sign_in_session_service[password]").value = pass 
-				end.click_button
-			end
-			sleep 1
-
-			if not login?
-				puts "ログインに失敗しました"
-				exit
-			end
-		end while not login?
-
-		two_step_verifications if need_two_step_verifications?
+	#ensure: ログアウトする
+	public
+	def sign_out
+		sign_out_url = "https://moneyforward.com/users/sign_out"
+		@agent.delete(sign_out_url)
+		sleep 1
 	end
 
 	#require: ログインが終わっている
 	#ensure: 2段階認証を完了する
 	private
 	def two_step_verifications
-		begin
-			print "2段階認証のコードを入力してください: "
-			verification_code = STDIN.gets.chomp
+		print "2段階認証のコードを入力してください: "
+		verification_code = STDIN.gets.chomp
 
-			two_step_verifications_url = "https://moneyforward.com/users/two_step_verifications"
-			@agent.get(two_step_verifications_url) do |page|
-				page.form_with(:action => '/users/two_step_verifications/verify') do |form|
-					form.field_with(:name => "verification_code").value = verification_code
-				end.click_button
-			end
-			sleep 1
-		end while need_two_step_verifications?
+		two_step_verifications_url = "https://moneyforward.com/users/two_step_verifications"
+		@agent.get(two_step_verifications_url) do |page|
+			page.form_with(:action => '/users/two_step_verifications/verify') do |form|
+				form.field_with(:name => "verification_code").value = verification_code
+			end.click_button
+		end
+		sleep 1
 	end
 
 	private
@@ -69,9 +79,13 @@ class MoneyForward
 		return @agent.page.uri.to_s.include?("two_step_verifications")
 	end
 
-	private
+	public
 	def login?
-		return !@agent.page.search("//a[@href=\"/users/sign_out\"]").empty?
+		begin
+			return !@agent.page.search("//a[@href=\"/users/sign_out\"]").empty?
+		rescue
+			false
+		end
 	end
 
 	public

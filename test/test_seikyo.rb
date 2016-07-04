@@ -11,6 +11,9 @@ class SeikyoTest < Test::Unit::TestCase
 
 	def test_login
 		assert @seikyo.login(ENV['SEIKYO_ID'], ENV['SEIKYO_PASS']), "正しいIDとPassの入力でログインが成功する"
+
+		sleep 3
+		assert (not @seikyo.login("hoge", "hogehoge")), "間違ったIDとPassを入れるとログインが失敗する"
 	end
 
 	def test_login?
@@ -19,5 +22,16 @@ class SeikyoTest < Test::Unit::TestCase
 		assert @seikyo.login?, "ログインした場合，login?はtrueを返す"
 	end
 
+	def test_analysis_cvs
 
+	end
+
+	def test_get_payment_history
+
+	end
+
+	def test_create_file_name
+
+	end
 end
+

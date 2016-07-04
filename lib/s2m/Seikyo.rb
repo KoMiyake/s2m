@@ -37,9 +37,9 @@ class Seikyo
 
 		if not login?
 			puts "ログインに失敗しました"
-			false
+			return false
 		end
-		true
+		return true
 	end
 
 	def login?

@@ -21,7 +21,11 @@ def main
 	payments = seikyo.get_payment_history
 
 	moneyforward = MoneyForward.new
-	moneyforward.login
+
+	#TODO: カウントしてlogin失敗しまくったらexitする
+	begin
+		moneyforward.login(ENV['MONEYFORWARD_ID'], ENV['MONEYFORWARD_PASS'])
+	end while not moneyforward.login?
 
 	moneyforward.add(payments)
 
