@@ -8,13 +8,21 @@
 
 まずはcloneしてください．
 
-そして，cloneしたディレクトリ内で以下のコマンドを実行することによって，必要なgemがインストールされます
+そして，cloneしたディレクトリ内で以下のコマンドを実行することによって，必要なgemがインストールされます．
 
 	$ bundle install 
 
-また，nkfコマンドが必要なので，それもインストールしてください
+また，nkfコマンドが必要なので，それもインストールしてください．
 
 	$ sudo apt-get install nkf
+
+### .env
+cloneしたディレクトリ直下に.envファイルを作成して，以下の書式にしたがってログイン情報を入力してください．
+
+	MONEYFORWARD_ID   = 'XXXXXXXXXXXXXXX'
+	MONEYFORWARD_PASS = 'XXXXXXXXXXXXXXX'
+	SEIKYO_ID   = 'XXXXXXXXXXXXXXX'
+	SEIKYO_PASS = 'XXXXXXXXXXXXXXX'
 
 ## Usage
 
@@ -28,15 +36,7 @@
 
 とすることで実行することができます．
 
-cloneしたディレクトリ直下に.envファイルを作成することによってログイン時の入力を省略することができます．
-
-### .env
-
-	MONEYFORWARD_ID   = 'XXXXXXXXXXXXXXX'
-	MONEYFORWARD_PASS = 'XXXXXXXXXXXXXXX'
-	MONEYFORWARD_ACCOUNT = 'XXXXXXXXXXXXXXX'
-	SEIKYO_ID   = 'XXXXXXXXXXXXXXX'
-	SEIKYO_PASS = 'XXXXXXXXXXXXXXX'
+初回の実行では生協の口座について質問されますが，以降の実行では質問されません．
 
 ## License
 

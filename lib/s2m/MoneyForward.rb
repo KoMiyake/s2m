@@ -9,6 +9,7 @@ class MoneyForward
 		@agent = Mechanize.new{|a| a.ssl_version, a.verify_mode = "SSLv23", OpenSSL::SSL::VERIFY_NONE}
 		@login_url = 'https://moneyforward.com/users/sign_in'
 		@base_url = 'https://moneyforward.com/'
+		@data_dir = File.expand_path("../../../data", __FILE__)
 	end
 
 	public
@@ -88,12 +89,12 @@ class MoneyForward
 
 	public
 	def add(payments)
-		account = select_account
+		account = get_account
 
 		last_payment_date = get_last_payment_date(account)
 		payments.delete_if {|payment| payment.day <= last_payment_date}
 		
-		$logger.info("#{payments.size}件の支払いを追加します")
+		puts "#{payments.size}件の支払いを追加します"
 
 		payments.each do |payment|
 			add_history(payment)
@@ -128,7 +129,7 @@ class MoneyForward
 	private
 	def get_last_payment_date(account)
 		account_name = account[1]
-		last_payment_date_file = File.expand_path("../../../data/last_payment_date", __FILE__)
+		last_payment_date_file = File.expand_path("last_payment_date", @data_dir)
 
 		if not File.exist?(last_payment_date_file)
 			puts "最後に#{account_name}で出金した日付を記入してください"
@@ -150,10 +151,12 @@ class MoneyForward
 
 	private
 	def record_last_payment_date(last_payment_date)
-		last_payment_date_file = File.expand_path("../../../data/last_payment_date", __FILE__)
+		last_payment_date_file = File.expand_path("last_payment_date", @data_dir)
 
 		if not File.exist?(last_payment_date_file)
-			Dir.mkdir(File.expand_path("../../../data", __FILE__), 0777)
+			if not Dir.exist?(@data_dir)
+				Dir.mkdir(@data_dir, 0777)
+			end
 			File.open(last_payment_date_file, "w")
 		end
 
@@ -163,7 +166,7 @@ class MoneyForward
 
 	# 登録されている財布から支払元を選択
 	private
-	def select_account
+	def get_account
 		accounts = []
 		key = []
 
@@ -178,26 +181,51 @@ class MoneyForward
 				end
 			end
 		end
+		
+		account_name = nil
+		account_num  = nil
+		account_file = File.expand_path("account", @data_dir)
 
-		account = ENV['MONEYFORWARD_ACCOUNT'].to_i
+		if File.exist?(account_file)
+			File.open(account_file) do |file|
+				account_name = file.read
+				account_num  = accounts.index(account_name)
+			end
+		end
+
 		while true
-			if account == nil
+			if account_name == nil
 				for i in 1..accounts.size-1
 					puts i.to_s + " " + accounts[i-1].to_s
 				end
 
 				print "どの支出元を使用しますか？: "
-				account = STDIN.gets.chomp.to_i
+				account_num = STDIN.gets.chomp.to_i-1
 			end
 
-			if 0 < account and account < accounts.size
+			if 0 < account_num and account_num < accounts.size
+				record_account(accounts[account_num].to_s)
 				break
 			else
 				puts "正しい数値を入力してください"
-				account = nil
+				account_num = nil
 			end
 		end
-		@payment_account = [key[account-1].to_s, accounts[account-1].to_s]
+		@payment_account = [key[account_num].to_s, accounts[account_num].to_s]
 		@payment_account
+	end
+	
+	private
+	def record_account(account)
+		account_file = File.expand_path("account", @data_dir)
+
+		if not File.exist?(account_file)
+			if not Dir.exist?(@data_dir)
+				Dir.mkdir(@data_dir, 0777)
+			end
+			File.open(account_file, "w")
+		end
+
+		File.write(account_file, account)
 	end
 end
