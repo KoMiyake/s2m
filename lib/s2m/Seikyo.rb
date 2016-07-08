@@ -15,16 +15,14 @@ class Seikyo
 
 	public
 	def login(id, pass)
-		puts "Login SEIKYO..."
 		if id == nil
-			print "ID: "
-			id = STDIN.gets.chomp
+			$logger.error('SEIKYO_ID not found.')
+			return false
 		end
 
 		if pass == nil
-			print "Pass: "
-			pass = STDIN.noecho(&:gets).chomp
-			puts ""
+			$logger.error('SEIKYO_PASS not found.')
+			return false
 		end
 
 		@agent.get(@login_url) do |page|
@@ -36,7 +34,7 @@ class Seikyo
 		sleep 1
 
 		if not login?
-			puts "ログインに失敗しました"
+			$logger.error('Failed to login.')
 			return false
 		end
 		return true
@@ -83,7 +81,6 @@ class Seikyo
 	# 2ヶ月分の購買履歴をとってくる
 	public
 	def get_payment_history
-		puts "購買履歴の取得をします..."
 		form =  @agent.page.form("menuForm")
 		form.id = "ALL_HISTORY"
 		form.action = "/mypage/Menu.change.do" + "?pageNm=" + "ALL_HISTORY"

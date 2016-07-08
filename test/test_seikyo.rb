@@ -7,6 +7,9 @@ class SeikyoTest < Test::Unit::TestCase
 	def setup
 		Dotenv.load File.expand_path(File.join(File.expand_path(File.dirname(__FILE__)), '../.env'))
 		@seikyo = Seikyo.new
+		
+		s2m_directory = File.expand_path(File.dirname(__FILE__))
+		$logger = Logger.new(File.expand_path(File.join(s2m_directory, '../log/s2m.log')))
 	end
 
 	def test_login

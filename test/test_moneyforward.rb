@@ -7,6 +7,9 @@ class MoneyForwardTest < Test::Unit::TestCase
 	def setup
 		Dotenv.load File.expand_path(File.join(File.expand_path(File.dirname(__FILE__)), '../.env'))
 		@moneyforward = MoneyForward.new
+		
+		s2m_directory = File.expand_path(File.dirname(__FILE__))
+		$logger = Logger.new(File.expand_path(File.join(s2m_directory, '../log/s2m.log')))
 	end
 
 	def test_login

@@ -13,16 +13,14 @@ class MoneyForward
 
 	public
 	def login(id, pass)
-		puts "Login MoneyForward..."
 		if id == nil
-			print "ID: "
-			id = STDIN.gets.chomp
+			$logger.error('MONEYFORWARD_ID not found.')
+			return false
 		end
 
 		if pass == nil
-			print "Pass: "
-			pass = STDIN.noecho(&:gets).chomp
-			puts ""
+			$logger.error('MONEYFORWARD_PASSWORD not found.')
+			return false
 		end
 
 		@agent.get(@login_url) do |page|
@@ -34,7 +32,7 @@ class MoneyForward
 		sleep 1
 
 		if not login?
-			puts "ログインに失敗しました"
+			$logger.error("Failed to login.")
 			return false
 		end
 		
@@ -42,7 +40,7 @@ class MoneyForward
 			two_step_verifications
 
 			if need_two_step_verifications?
-				puts "2段階認証に失敗しました"
+				$logger.error("Failed to two step verifications.")
 				return false
 			end
 		end
