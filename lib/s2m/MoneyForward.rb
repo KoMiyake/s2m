@@ -92,6 +92,8 @@ class MoneyForward
 
 		last_payment_date = get_last_payment_date(account)
 		payments.delete_if {|payment| payment.day <= last_payment_date}
+		
+		$logger.info("#{payments.size}件の支払いを追加します")
 
 		payments.each do |payment|
 			add_history(payment)
