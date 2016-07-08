@@ -11,7 +11,10 @@ require 'dotenv'
 require 'logger'
 
 if not File.exist?(log_file)
-	Dir.mkdir(File.expand_path(File.join(s2m_directory, '../log')), 0777)
+	log_dir = File.expand_path(File.join(s2m_directory, '../log'))
+	if not Dir.exist?(log_dir)
+		Dir.mkdir(log_dir, 0777)
+	end
 	File.open(log_file, "w")
 end
 $logger = Logger.new(log_file)
