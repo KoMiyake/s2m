@@ -34,7 +34,7 @@ class Seikyo
 		sleep 1
 
 		if not login?
-			$logger.error('Failed to login.')
+			$logger.error('Failed to login to the Seikyo.')
 			return false
 		end
 		return true
