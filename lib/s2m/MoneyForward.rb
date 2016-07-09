@@ -36,7 +36,7 @@ class MoneyForward
 			$logger.error("Failed to login to the MoneyForward.")
 			return false
 		end
-		
+
 		while need_two_step_verifications?
 			two_step_verifications
 
@@ -91,7 +91,7 @@ class MoneyForward
 	def add(payments)
 		last_payment_date = get_last_payment_date(account)
 		payments.delete_if {|payment| payment.day <= last_payment_date}
-		
+
 		puts "#{payments.size}件の支払いを追加します"
 
 		payments.each do |payment|
@@ -105,6 +105,7 @@ class MoneyForward
 		end
 	end
 
+	#ensure: 支払情報をMoneyFowardに登録する
 	private
 	def add_history(payment)
 		@agent.get("https://moneyforward.com/")
@@ -179,18 +180,16 @@ class MoneyForward
 				end
 			end
 		end
-		
+
 		account_num  = accounts.index(get_account_name)
 
-		while true
-			if account_num == nil
-				for i in 1..accounts.size-1
-					puts i.to_s + " " + accounts[i-1].to_s
-				end
-
-				print "どの支出元を使用しますか？: "
-				account_num = STDIN.gets.chomp.to_i-1
+		while account_num == nil
+			for i in 1..accounts.size-1
+				puts i.to_s + " " + accounts[i-1].to_s
 			end
+
+			print "どの支出元を使用しますか？: "
+			account_num = STDIN.gets.chomp.to_i-1
 
 			if 0 < account_num and account_num < accounts.size
 				record_account(accounts[account_num].to_s)
