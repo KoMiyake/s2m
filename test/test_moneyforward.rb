@@ -31,4 +31,10 @@ class MoneyForwardTest < Test::Unit::TestCase
 		@moneyforward.sign_out
 		assert (not @moneyforward.login?), "ログアウトしたならば，ログイン状態ではない"
 	end
+
+	def test_get_account
+		@moneyforward.login(ENV['MONEYFORWARD_ID'], ENV['MONEYFORWARD_PASS'])
+		
+		assert_equal @moneyforward.send(:get_account_name), @moneyforward.send(:account)[1]
+	end
 end

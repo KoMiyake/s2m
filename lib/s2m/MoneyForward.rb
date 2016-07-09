@@ -89,8 +89,6 @@ class MoneyForward
 
 	public
 	def add(payments)
-		account = get_account
-
 		last_payment_date = get_last_payment_date(account)
 		payments.delete_if {|payment| payment.day <= last_payment_date}
 		
@@ -166,7 +164,7 @@ class MoneyForward
 
 	# 登録されている財布から支払元を選択
 	private
-	def get_account
+	def account
 		accounts = []
 		key = []
 
@@ -182,19 +180,10 @@ class MoneyForward
 			end
 		end
 		
-		account_name = nil
-		account_num  = nil
-		account_file = File.expand_path("account", @data_dir)
-
-		if File.exist?(account_file)
-			File.open(account_file) do |file|
-				account_name = file.read
-				account_num  = accounts.index(account_name)
-			end
-		end
+		account_num  = accounts.index(get_account_name)
 
 		while true
-			if account_name == nil
+			if account_num == nil
 				for i in 1..accounts.size-1
 					puts i.to_s + " " + accounts[i-1].to_s
 				end
@@ -214,7 +203,21 @@ class MoneyForward
 		@payment_account = [key[account_num].to_s, accounts[account_num].to_s]
 		@payment_account
 	end
-	
+
+	private
+	def get_account_name
+		account_file = File.expand_path("account", @data_dir)
+		account_name = nil
+
+		if File.exist?(account_file)
+			File.open(account_file) do |file|
+				account_name = file.read
+			end
+		end
+
+		account_name
+	end
+
 	private
 	def record_account(account)
 		account_file = File.expand_path("account", @data_dir)
