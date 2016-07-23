@@ -81,41 +81,46 @@ class Seikyo
 	# 2ヶ月分の購買履歴をとってくる
 	public
 	def get_payment_history
-		form =  @agent.page.form("menuForm")
-		form.id = "ALL_HISTORY"
-		form.action = "/mypage/Menu.change.do" + "?pageNm=" + "ALL_HISTORY"
-		@agent.submit(form)
-		sleep 1
+		goto_history_page
+		payments = all_history_form_csv_download 
 
-		cvs_file = create_file_name()
+		goto_last_month_history_page
+		payments = payments + all_history_form_csv_download
 
-		form = @agent.page.form("AllHistoryFormCsvDownload")
-		@agent.submit(form).save_as(cvs_file)
+		payments
+	end
 
-		payments = analysis_cvs(cvs_file)
-
-
-		@agent.get("https://mp.seikyou.jp/mypage/Menu.change.do")
-		sleep 1
-		form =  @agent.page.form("menuForm")
-		form.id = "ALL_HISTORY"
-		form.action = "/mypage/Menu.change.do" + "?pageNm=" + "ALL_HISTORY"
-		@agent.submit(form)
-		sleep 1
+	private
+	def goto_last_month_history_page
+		goto_history_page
 
 		form = @agent.page.form_with(:name => "AllHistoryFormChangeDate")
 		form.field_with(:name => "rirekiDate").options.first.select
 		@agent.submit(form)
 		sleep 1
+	end
 
+	private
+	def goto_history_page
+		@agent.get("https://mp.seikyou.jp/mypage/Menu.change.do")
+		sleep 1
+		
+		form =  @agent.page.form("menuForm")
+		form.id = "ALL_HISTORY"
+		form.action = "/mypage/Menu.change.do" + "?pageNm=" + "ALL_HISTORY"
+		@agent.submit(form)
+		sleep 1
+
+	end
+
+	private
+	def all_history_form_csv_download
 		cvs_file = create_file_name()
 
 		form = @agent.page.form("AllHistoryFormCsvDownload")
 		@agent.submit(form).save_as(cvs_file)
 
-		payments = payments + analysis_cvs(cvs_file)
-
-		payments
+		analysis_cvs(cvs_file)
 	end
 
 	private
