@@ -78,10 +78,17 @@ class Seikyo
 		payments
 	end
 
+	public
+	def get_deposit_history
+		change_page("PAYMENT_HISTORY")
+		
+
+	end
+	
 	# 2ヶ月分の購買履歴をとってくる
 	public
 	def get_payment_history
-		goto_history_page
+		change_page("ALL_HISTORY")
 		payments = all_history_form_csv_download 
 
 		goto_last_month_history_page
@@ -92,25 +99,25 @@ class Seikyo
 
 	private
 	def goto_last_month_history_page
-		goto_history_page
+		change_page("ALL_HISTORY")	
 
 		form = @agent.page.form_with(:name => "AllHistoryFormChangeDate")
 		form.field_with(:name => "rirekiDate").options.first.select
 		@agent.submit(form)
 		sleep 1
 	end
-
+	
+	#購入履歴，入金履歴等のページに切り替える
 	private
-	def goto_history_page
+	def change_page(menu)
 		@agent.get("https://mp.seikyou.jp/mypage/Menu.change.do")
 		sleep 1
 		
 		form =  @agent.page.form("menuForm")
-		form.id = "ALL_HISTORY"
-		form.action = "/mypage/Menu.change.do" + "?pageNm=" + "ALL_HISTORY"
+		form.id = menu 
+		form.action = "/mypage/Menu.change.do" + "?pageNm=" + menu 
 		@agent.submit(form)
 		sleep 1
-
 	end
 
 	private

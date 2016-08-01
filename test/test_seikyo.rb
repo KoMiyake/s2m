@@ -25,6 +25,14 @@ class SeikyoTest < Test::Unit::TestCase
 		assert @seikyo.login?, "ログインした場合，login?はtrueを返す"
 	end
 
+	def test_change_page
+		@seikyo.login(ENV['SEIKYO_ID'], ENV['SEIKYO_PASS'])
+		@seikyo.send(:change_page, "ALL_HISTORY")
+		assert @seikyo.instance_variable_get('@agent').page.uri.to_s.include?("ALL_HISTORY"), "出勤履歴を取得するページに到達している"
+		@seikyo.send(:change_page, "PAYMENT_HISTORY")
+		assert @seikyo.instance_variable_get('@agent').page.uri.to_s.include?("PAYMENT_HISTORY"), "入金履歴を取得するページに到達している"
+	end
+
 	def test_analysis_cvs
 
 	end
