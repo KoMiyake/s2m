@@ -5,6 +5,7 @@ log_file = File.expand_path(File.join(s2m_directory, '../log/s2m.log'))
 
 require File.expand_path(File.join(s2m_directory, 's2m/MoneyForward'))
 require File.expand_path(File.join(s2m_directory, 's2m/Payment'))
+require File.expand_path(File.join(s2m_directory, 's2m/Deposit'))
 require File.expand_path(File.join(s2m_directory, 's2m/Seikyo'))
 
 require 'dotenv'

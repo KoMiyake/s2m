@@ -2,6 +2,8 @@ require 'test/unit'
 require 'dotenv'
 
 require File.expand_path('lib/s2m/Seikyo')
+require File.expand_path('lib/s2m/Deposit')
+require File.expand_path('lib/s2m/Payment')
 
 class SeikyoTest < Test::Unit::TestCase
 	def setup
@@ -37,12 +39,7 @@ class SeikyoTest < Test::Unit::TestCase
 
 	end
 
-	def test_get_payment_history
-
-	end
-
 	def test_create_file_name
 
 	end
 end
-

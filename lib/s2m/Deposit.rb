@@ -5,6 +5,6 @@ class Deposit
 	end
 
 	def to_s
-		"#{@day.month_to_s + "/" + @day.day.to_s} #{@price}"
+		"#{@day.month.to_s + "/" + @day.day.to_s} #{@price}"
 	end
 end
