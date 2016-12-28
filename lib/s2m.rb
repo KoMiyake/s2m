@@ -23,34 +23,10 @@ Dotenv.load File.expand_path(File.join(File.expand_path(File.dirname(__FILE__)),
 
 
 def main
-	seikyo = Seikyo.new
-
-	count = 0
-	begin
-		seikyo.login(ENV['SEIKYO_ID'], ENV['SEIKYO_PASS'])
-
-		count += 1
-		if count == 3
-			STDERR.puts "Failed to login to the Seikyo.\n"
-			exit 1
-		end
-	end while not seikyo.login? 
-
+	seikyo = Seikyo.new(ENV['SEIKYO_ID'], ENV['SEIKYO_PASS'])
 	payments = seikyo.get_payment_history
 
-	moneyforward = MoneyForward.new
-
-	count = 0
-	begin
-		moneyforward.login(ENV['MONEYFORWARD_ID'], ENV['MONEYFORWARD_PASS'])
-
-		count += 1
-		if count == 3
-			STDERR.puts "Failed to login to the MoneyForward.\n"
-			exit 1
-		end
-	end while not moneyforward.login?
-
+	moneyforward = MoneyForward.new(ENV['MONEYFORWARD_ID'], ENV['MONEYFORWARD_PASS'])
 	moneyforward.add(payments)
 end
 

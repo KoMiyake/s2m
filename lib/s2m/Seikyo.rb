@@ -11,12 +11,23 @@ class Seikyo
 	DEPOSIT_HISTORY = "PaymentHistoryFormCsvDownload"
 	PAYMENT_HISTORY = "AllHistoryFormCsvDownload"
 
-	def initialize
+	def initialize(id, pass)
 		@agent = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv23', OpenSSL::SSL::VERIFY_NONE}
 		@login_url = 'https://mp.seikyou.jp/mypage/Static.init.do'
+
+    count = 0
+    begin
+      login(ENV['SEIKYO_ID'], ENV['SEIKYO_PASS'])
+
+      count += 1
+      if count == 3
+        STDERR.puts "Failed to login to the Seikyo.\n"
+        exit 1
+      end
+    end while not login? 
 	end
 
-	public
+  private
 	def login(id, pass)
 		if id == nil
 			$logger.error('SEIKYO_ID not found.')
@@ -43,6 +54,7 @@ class Seikyo
 		return true
 	end
 
+  private
 	def login?
 		begin
 			return !@agent.page.search("//img[@alt=\"ログイン中\"]").empty?

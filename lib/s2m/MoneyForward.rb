@@ -5,14 +5,25 @@ require 'nokogiri'
 require 'io/console'
 
 class MoneyForward
-	def initialize
+	def initialize(id, pass)
 		@agent = Mechanize.new{|a| a.ssl_version, a.verify_mode = "SSLv23", OpenSSL::SSL::VERIFY_NONE}
 		@login_url = 'https://moneyforward.com/users/sign_in'
 		@base_url = 'https://moneyforward.com/'
 		@data_dir = File.expand_path("../../../data", __FILE__)
+    
+    count = 0
+    begin
+      login(ENV['MONEYFORWARD_ID'], ENV['MONEYFORWARD_PASS'])
+
+      count += 1
+      if count == 3
+        STDERR.puts "Failed to login to the MoneyForward.\n"
+        exit 1
+      end
+    end while not login?
 	end
 
-	public
+  private
 	def login(id, pass)
 		if id == nil
 			$logger.error('MONEYFORWARD_ID not found.')
@@ -78,8 +89,8 @@ class MoneyForward
 		return @agent.page.uri.to_s.include?("two_step_verifications")
 	end
 
-	public
-	def login?
+  private
+  def login?
 		begin
 			return !@agent.page.search("//a[@href=\"/users/sign_out\"]").empty?
 		rescue
