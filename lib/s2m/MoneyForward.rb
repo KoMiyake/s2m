@@ -191,7 +191,7 @@ class MoneyForward
 			print "どの支出元を使用しますか？: "
 			account_num = STDIN.gets.chomp.to_i-1
 
-			if 0 < account_num and account_num < accounts.size
+			if 0 <= account_num and account_num < accounts.size
 				record_account(accounts[account_num].to_s)
 				break
 			else
