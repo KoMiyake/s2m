@@ -12,22 +12,22 @@ require 'dotenv'
 require 'logger'
 
 if not File.exist?(log_file)
-	log_dir = File.expand_path(File.join(s2m_directory, '../log'))
-	if not Dir.exist?(log_dir)
-		Dir.mkdir(log_dir, 0777)
-	end
-	File.open(log_file, "w")
+  log_dir = File.expand_path(File.join(s2m_directory, '../log'))
+  if not Dir.exist?(log_dir)
+    Dir.mkdir(log_dir, 0777)
+  end
+  File.open(log_file, "w")
 end
 $logger = Logger.new(log_file)
 Dotenv.load File.expand_path(File.join(File.expand_path(File.dirname(__FILE__)), '../.env'))
 
 
 def main
-	seikyo = Seikyo.new(ENV['SEIKYO_ID'], ENV['SEIKYO_PASS'])
-	payments = seikyo.get_payment_history
+  seikyo = Seikyo.new(ENV['SEIKYO_ID'], ENV['SEIKYO_PASS'])
+  payments = seikyo.get_payment_history
 
-	moneyforward = MoneyForward.new(ENV['MONEYFORWARD_ID'], ENV['MONEYFORWARD_PASS'])
-	moneyforward.add(payments)
+  moneyforward = MoneyForward.new(ENV['MONEYFORWARD_ID'], ENV['MONEYFORWARD_PASS'])
+  moneyforward.add(payments)
 end
 
 main()
