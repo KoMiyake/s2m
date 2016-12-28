@@ -12,7 +12,7 @@ class Seikyo
 	PAYMENT_HISTORY = "AllHistoryFormCsvDownload"
 
 	def initialize
-		@agent = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv3', OpenSSL::SSL::VERIFY_NONE}
+		@agent = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv23', OpenSSL::SSL::VERIFY_NONE}
 		@login_url = 'https://mp.seikyou.jp/mypage/Static.init.do'
 	end
 
