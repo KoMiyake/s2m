@@ -78,7 +78,7 @@ class Seikyo
         date = data[0].split("(")[0].split("/")
         day = Time.gm(Time.now.year, date[0].to_i, date[1].to_i, 0, 0, 0)
         if Time.now < day
-          day.year = day.year-1
+          day = Time.gm(Time.now.year-1, date[0].to_i, date[1].to_i, 0, 0, 0)
         end
 
         product = data[2]
