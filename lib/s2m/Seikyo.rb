@@ -107,7 +107,7 @@ class Seikyo
         date = data[0].split("(")[0].split("/")
         day = Time.gm(Time.now.year, date[0].to_i, date[1].to_i, 0, 0, 0)
         if Time.now < day
-          day.year = day.year-1
+          day = Time.gm(Time.now.year-1, date[0].to_i, date[1].to_i, 0, 0, 0)
         end
 
         price = data[3]
@@ -119,6 +119,7 @@ class Seikyo
     deposits
   end
 
+  # 2ヶ月分の入金履歴をとってくる
   public
   def get_deposit_history
     change_page("PAYMENT_HISTORY")
