@@ -27,7 +27,7 @@ def main
   payments = seikyo.get_payment_history
 
   moneyforward = MoneyForward.new(ENV['MONEYFORWARD_ID'], ENV['MONEYFORWARD_PASS'])
-  moneyforward.add(payments)
+  moneyforward.add_payment_hisoty(payments)
 end
 
 main()

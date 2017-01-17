@@ -99,7 +99,7 @@ class MoneyForward
   end
 
   public
-  def add(payments)
+  def add_payment_hisoty(payments)
     last_payment_date = get_last_payment_date(account)
     payments.delete_if {|payment| payment.day <= last_payment_date}
 
