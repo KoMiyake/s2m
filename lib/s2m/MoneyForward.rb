@@ -134,6 +134,21 @@ class MoneyForward
     sleep 1
   end
 
+  #残高修正
+  public
+  def rollover(account, payment)
+	  @agent.get("https://moneyforward.com/accounts/show/#{account_id_hash}")
+	  sleep 1
+
+	  @agent.page.form_with(:id => "rollover_form") do |form|
+		form["rollover_info[account_id_hash]"] = account_id_hash 
+		form["rollover_info[value]"] = payment.price
+		form["rollover_info[transaction_flag]"] = 0
+		form["rollover_info[updated_at]"] = payment.day.year.to_s + "/" + payment.day.month.to_s + "/" + payment.day.day.to_s
+	  end.click_button
+	  sleep 1
+  end
+
   #require: 使用する口座
   #ensure: 口座の最終出金日を与える
   private
