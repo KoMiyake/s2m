@@ -134,19 +134,30 @@ class MoneyForward
     sleep 1
   end
 
+  #TODO: 振替はしていないので，財布の方のお金の整合性が合わなくなる
+  public
+  def fix_balance(seikyo_balance)
+	  goto_account_page(account[1])
+	  rollover(seikyo_balance)
+  end
+
   #残高修正
   public
-  def rollover(account, payment)
-	  @agent.get("https://moneyforward.com/accounts/show/#{account_id_hash}")
-	  sleep 1
+  def rollover(balance)
+    @agent.page.form_with(:id => "rollover_form") do |form|
+      form["rollover_info[value]"] = balance
+      form["rollover_info[transaction_flag]"] = 0
+	  form["rollover_info[updated_at]"] = "#{Time.now.year}/#{Time.now.month}/#{Time.now.day}"
+	end.click_button
+	sleep 1
+  end
 
-	  @agent.page.form_with(:id => "rollover_form") do |form|
-		form["rollover_info[account_id_hash]"] = account_id_hash 
-		form["rollover_info[value]"] = payment.price
-		form["rollover_info[transaction_flag]"] = 0
-		form["rollover_info[updated_at]"] = payment.day.year.to_s + "/" + payment.day.month.to_s + "/" + payment.day.day.to_s
-	  end.click_button
-	  sleep 1
+  private
+  def goto_account_page(account_name)
+   href = @agent.page.search("//a[.=\"#{account_name.strip}\"]").attribute("href")
+   url = "https://moneyforward.com#{href}"
+   @agent.get(url)
+   sleep 1
   end
 
   #require: 使用する口座

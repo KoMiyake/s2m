@@ -24,10 +24,12 @@ Dotenv.load File.expand_path(File.join(File.expand_path(File.dirname(__FILE__)),
 
 def main
   seikyo = Seikyo.new(ENV['SEIKYO_ID'], ENV['SEIKYO_PASS'])
+  seikyo_balance = seikyo.get_balance
   payments = seikyo.get_payment_history
 
   moneyforward = MoneyForward.new(ENV['MONEYFORWARD_ID'], ENV['MONEYFORWARD_PASS'])
   moneyforward.add_payment_hisoty(payments)
+  moneyforward.fix_balance(seikyo_balance)
 end
 
 main()
