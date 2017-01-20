@@ -143,7 +143,7 @@ class Seikyo
   def get_balance
     @agent.get("https://mp.seikyou.jp/mypage/Menu.change.do")
     sleep 1
-	@agent.page.search("//*[@id=\"point_zandaka\"]/table/tr[2]/td/span").text
+	@agent.page.search("//*[@id=\"point_zandaka\"]/table/tr[2]/td/span").text.gsub(",", "")
   end
 
   private
