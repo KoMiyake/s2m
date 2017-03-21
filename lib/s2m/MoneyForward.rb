@@ -13,7 +13,7 @@ class MoneyForward
 
     count = 0
     begin
-      login(ENV['MONEYFORWARD_ID'], ENV['MONEYFORWARD_PASS'])
+      login(id, pass)
 
       count += 1
       if count == 3

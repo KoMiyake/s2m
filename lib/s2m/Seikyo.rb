@@ -17,7 +17,7 @@ class Seikyo
 
     count = 0
     begin
-      login(ENV['SEIKYO_ID'], ENV['SEIKYO_PASS'])
+      login(id, pass)
 
       count += 1
       if count == 3
