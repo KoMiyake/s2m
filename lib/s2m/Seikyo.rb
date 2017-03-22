@@ -14,6 +14,7 @@ class Seikyo
   def initialize(id, pass)
     @agent = Mechanize.new{|a| a.ssl_version, a.verify_mode = 'SSLv23', OpenSSL::SSL::VERIFY_NONE}
     @login_url = 'https://mp.seikyou.jp/mypage/Static.init.do'
+    @name = :seikyo
 
     count = 0
     begin
@@ -84,7 +85,7 @@ class Seikyo
         product = data[2]
         price = data[4]
 
-        payments << Payment.new(day, product, price, LARGE_CATEGORY_ID_OF_FOOD_EXPENSES, MIDDLE_CATEGORY_ID_OF_EATING_OUT)
+        payments << Payment.new(day, product, price, LARGE_CATEGORY_ID_OF_FOOD_EXPENSES, MIDDLE_CATEGORY_ID_OF_EATING_OUT, @name)
       end
     end
 
@@ -112,7 +113,7 @@ class Seikyo
 
         price = data[3]
 
-        deposits << Deposit.new(day, price, 1, 1)
+        deposits << Deposit.new(day, price, 1, 1, @name)
       end
     end
 
